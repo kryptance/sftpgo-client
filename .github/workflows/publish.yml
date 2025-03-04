@@ -1,0 +1,27 @@
+name: Publish JAR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Publish to GitHub Packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew publish
